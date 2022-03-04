@@ -8,11 +8,11 @@ r = redis.Redis(host='127.0.0.1', port=6379, decode_responses=True)
 def home():
     return {"welcome":"home"}
 
-@app.get("/createuser/{name}")
-def createUser(name:str):
+@app.get("/createuser/{name}/{descript}")
+def createUser(name:str, descript:str):
     username = "user" + str(str(r.scan().count("user")))
     r.hset(username, "name", name)
-    #r.hset(username, "desc", descript)
+    r.hset(username, "desc", descript)
     return username
 
 @app.get("/allusers")
@@ -29,12 +29,3 @@ def getSingleUser(userID:str):
         "description":r.hget(userID, "desc")   
     }
     return user
-
-
-
-#print(createUser("alejaniudra", "dhievops3"))
-#print(getSingleUser("user2"))
-#print(getAllUsers())
-
-#if __name__ == '__main__':
-#    app.run(host='localhost', debug=True)
